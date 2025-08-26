@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface WorkOrderRepository extends JpaRepository<WorkOrder, Integer> {
+    long countByCurrentStatus(String currentStatus);
 }
