@@ -26,14 +26,10 @@ public class SecurityConfig {
     @Bean // 이 메서드가 반환하는 객체를 Spring Bean으로 등록
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http
-                // CORS 설정 활성화
+                // CORS 설정 활성화 -프론트엔드와 백엔드가 도메인이 다를 경우 필요
                 .cors(Customizer.withDefaults())
                 // JWT를 사용하므로 CSRF 보호 비활성화
                 .csrf(csrf ->csrf.disable())
-                // H2-Console 사용을 위해 X-Frame-Options 비활성화
-                .headers(headers -> headers.frameOptions(
-                        frame ->frame.disable()
-                ))
                 // JWT 기반 인증을 위해 세션 사용 안 함
                 .sessionManagement(
                         sess ->sess.sessionCreationPolicy(
@@ -43,12 +39,9 @@ public class SecurityConfig {
                 // 요청 경로에 대한 접근 권한 설정
                 .authorizeHttpRequests(
                         auth -> auth.requestMatchers(
-                                        // 누구나 접근 가능한 '공개' 경로 설정 (화이트리스트)
+                                        // 누구나 접근 가능한 '공개' 경로 설정
                                         "/api/auth/login"
-//                                        "/api/v1/admin/register",
-//                                        "/api/v1/worker/register", // worker 등록 API 경로
-//                                        "/api/v1/manager/register", // manager 등록 API 경로
-//                                        "/h2-console", "/h2-console/**"
+
                                 ).permitAll()
                                 // 특정 역할(ROLE)을 가진 사용자만 접근 허용
 //                                .requestMatchers("/api/v1/admin", "/api/v1/admin/**").hasRole("ADMIN")
