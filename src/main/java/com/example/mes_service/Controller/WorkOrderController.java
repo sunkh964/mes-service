@@ -17,9 +17,13 @@ public class WorkOrderController {
 
     private final WorkOrderService workOrderService;
 
+    // ✨ GET 요청이 파라미터를 받을 수 있도록 수정
     @GetMapping
-    public ResponseEntity<List<WorkOrderResponseDto>> getAllWorkOrders() {
-        return ResponseEntity.ok(workOrderService.findAllWorkOrders());
+    public ResponseEntity<List<WorkOrderResponseDto>> getAllWorkOrders(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String workCenterId
+    ) {
+        return ResponseEntity.ok(workOrderService.findAllWorkOrders(status, workCenterId));
     }
 
     @PostMapping

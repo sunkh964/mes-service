@@ -1,67 +1,35 @@
-// File: src/main/java/com/example/mes_service/entity/WorkOrder.java
 package com.example.mes_service.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.List; // List import 추가
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@ToString
+//... (다른 애너테이션)
 @Entity
 @Table(name = "work_orders")
 public class WorkOrder {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "work_order_id")
-    private Integer workOrderId;
-
-    @Column(length = 50)
-    private String instruction;
-
-    @Column(name = "quantity_to_produce", nullable = false)
-    private Integer quantityToProduce;
-
-    @Column(name = "quantity_produced")
-    private Integer quantityProduced = 0;
-
-    @Column(name = "planned_start_date")
-    private LocalDateTime plannedStartDate;
-
-    @Column(name = "planned_end_date")
-    private LocalDateTime plannedEndDate;
-
-    @Column(name = "actual_start_date")
-    private LocalDateTime actualStartDate;
-
-    @Column(name = "actual_end_date")
-    private LocalDateTime actualEndDate;
-
-    @Column(name = "current_status", length = 20)
-    private String currentStatus = "waiting";
-
-    // 스키마에는 FK 제약조건이 없지만, 관계를 명시적으로 매핑합니다.
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "process_id", nullable = false)
-    @ToString.Exclude
-    private Process process;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "process_plan_id", nullable = false)
-    @ToString.Exclude
-    private ProcessPlan processPlan;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "block_id", nullable = false)
-    @ToString.Exclude
-    private Block block;
+    //... (기존 필드들은 그대로)
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "work_center_id", nullable = false)
     @ToString.Exclude
     private WorkCenter workCenter;
+
+    // ✨ 아래의 @OneToMany 관계들을 추가해주세요.
+
+    // WorkOrder 하나에 여러 개의 WorkResult가 있을 수 있다는 관계 설정
+    @OneToMany(mappedBy = "workOrder", fetch = FetchType.LAZY)
+    private List<WorkResult> workResults;
+
+    // WorkOrder 하나에 여러 개의 MaterialOutput이 있을 수 있다는 관계 설정
+    @OneToMany(mappedBy = "workOrder", fetch = FetchType.LAZY)
+    private List<MaterialOutput> materialOutputs;
+
+    // WorkOrder 하나에 여러 개의 QualityControl이 있을 수 있다는 관계 설정
+    @OneToMany(mappedBy = "workOrder", fetch = FetchType.LAZY)
+    private List<QualityControl> qualityControls;
 }

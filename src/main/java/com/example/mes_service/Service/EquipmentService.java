@@ -47,4 +47,29 @@ public class EquipmentService {
         Equipment savedEquipment = equipmentRepository.save(equipment);
         return new EquipmentResponseDto(savedEquipment);
     }
+
+    // ✨ 설비 정보 수정
+    @Transactional
+    public EquipmentResponseDto updateEquipment(String equipmentId, EquipmentCreateRequestDto requestDto) {
+        Equipment equipment = equipmentRepository.findById(equipmentId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Equipment ID"));
+
+        // workCenter는 ID로 다시 찾아와서 설정
+        WorkCenter workCenter = workCenterRepository.findById(requestDto.getWorkCenterId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid WorkCenter ID"));
+
+        equipment.setEquipmentName(requestDto.getEquipmentName());
+        equipment.setModelName(requestDto.getModelName());
+        equipment.setStatus(requestDto.getStatus());
+        equipment.setLastInspectionDate(requestDto.getLastInspectionDate());
+        equipment.setWorkCenter(workCenter);
+
+        return new EquipmentResponseDto(equipment);
+    }
+
+    // ✨ 설비 정보 삭제
+    @Transactional
+    public void deleteEquipment(String equipmentId) {
+        equipmentRepository.deleteById(equipmentId);
+    }
 }

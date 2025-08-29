@@ -23,8 +23,13 @@ public class WorkOrderService {
     private final BlockRepository blockRepository;
     private final WorkCenterRepository workCenterRepository;
 
-    public List<WorkOrderResponseDto> findAllWorkOrders() {
-        return workOrderRepository.findAll().stream()
+    // ✨ findAllWorkOrders 메서드를 검색 조건을 받도록 수정
+    public List<WorkOrderResponseDto> findAllWorkOrders(String status, String workCenterId) {
+        // 검색 조건 값이 비어있으면 null로 바꿔서 전달 (JPQL에서 IS NULL로 처리하기 위함)
+        String statusFilter = (status == null || status.isEmpty()) ? null : status;
+        String wcIdFilter = (workCenterId == null || workCenterId.isEmpty()) ? null : workCenterId;
+
+        return workOrderRepository.findByFilters(statusFilter, wcIdFilter).stream()
                 .map(WorkOrderResponseDto::new)
                 .collect(Collectors.toList());
     }

@@ -31,4 +31,17 @@ public class EquipmentController {
         EquipmentResponseDto createdEquipment = equipmentService.createEquipment(requestDto);
         return new ResponseEntity<>(createdEquipment, HttpStatus.CREATED);
     }
+
+    // ✨ 설비 정보 수정 API
+    @PutMapping("/{id}")
+    public ResponseEntity<EquipmentResponseDto> updateEquipment(@PathVariable String id, @RequestBody EquipmentCreateRequestDto requestDto) {
+        return ResponseEntity.ok(equipmentService.updateEquipment(id, requestDto));
+    }
+
+    // ✨ 설비 정보 삭제 API
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteEquipment(@PathVariable String id) {
+        equipmentService.deleteEquipment(id);
+        return ResponseEntity.noContent().build();
+    }
 }
