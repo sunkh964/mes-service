@@ -27,4 +27,17 @@ public class ProcessController {
         ProcessResponseDto createdProcess = processService.createProcess(requestDto);
         return new ResponseEntity<>(createdProcess, HttpStatus.CREATED);
     }
+
+    // ✨ 공정 수정 (새로 추가)
+    @PutMapping("/{id}")
+    public ResponseEntity<ProcessResponseDto> updateProcess(@PathVariable String id, @RequestBody ProcessCreateRequestDto requestDto) {
+        return ResponseEntity.ok(processService.updateProcess(id, requestDto));
+    }
+
+    // ✨ 공정 삭제 (새로 추가)
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProcess(@PathVariable String id) {
+        processService.deleteProcess(id);
+        return ResponseEntity.noContent().build();
+    }
 }

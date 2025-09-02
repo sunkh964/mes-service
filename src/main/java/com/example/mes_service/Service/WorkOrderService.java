@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -58,5 +60,23 @@ public class WorkOrderService {
 
         WorkOrder savedWorkOrder = workOrderRepository.save(workOrder);
         return new WorkOrderResponseDto(savedWorkOrder);
+    }
+
+    // ✨ 작업지시 상태 변경 (새로 추가)
+    @Transactional
+    public WorkOrderResponseDto updateWorkOrderStatus(Integer workOrderId, String newStatus) {
+        WorkOrder workOrder = workOrderRepository.findById(workOrderId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid WorkOrder ID"));
+
+        // 상태 변경과 함께 실제 시작/종료 시간도 기록
+        if ("in_progress".equals(newStatus)) {
+            workOrder.setActualStartDate(LocalDateTime.now());
+        } else if ("completed".equals(newStatus)) {
+            workOrder.setActualEndDate(LocalDateTime.now());
+        }
+
+        workOrder.setCurrentStatus(newStatus);
+
+        return new WorkOrderResponseDto(workOrder);
     }
 }

@@ -70,7 +70,7 @@ public class WorkOrder {
     @OneToMany(mappedBy = "workOrder", fetch = FetchType.LAZY)
     private List<WorkResult> workResults;
 
-    @OneToMany(mappedby = "workOrder", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "workOrder", fetch = FetchType.LAZY)
     private List<MaterialOutput> materialOutputs;
 
     @OneToMany(mappedBy = "workOrder", fetch = FetchType.LAZY)

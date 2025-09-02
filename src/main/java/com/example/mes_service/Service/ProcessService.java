@@ -36,4 +36,25 @@ public class ProcessService {
         Process savedProcess = processRepository.save(process);
         return new ProcessResponseDto(savedProcess);
     }
+
+    // ✨ 공정 수정 (새로 추가)
+    @Transactional
+    public ProcessResponseDto updateProcess(String processId, ProcessCreateRequestDto requestDto) {
+        Process process = processRepository.findById(processId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 공정이 없습니다. id=" + processId));
+
+        process.setProcessName(requestDto.getProcessName());
+        process.setProcessInfo(requestDto.getProcessInfo());
+        process.setProcessSequence(requestDto.getProcessSequence());
+
+        return new ProcessResponseDto(process);
+    }
+
+    // ✨ 공정 삭제 (새로 추가)
+    @Transactional
+    public void deleteProcess(String processId) {
+        Process process = processRepository.findById(processId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 공정이 없습니다. id=" + processId));
+        processRepository.delete(process);
+    }
 }

@@ -11,11 +11,13 @@ import java.util.List;
 @Repository
 public interface WorkOrderRepository extends JpaRepository<WorkOrder, Integer> {
 
+    // 특정 상태별 WorkOrder 개수 조회
     long countByCurrentStatus(String currentStatus);
 
-    // ✨ 검색 조건을 위한 JPQL 쿼리 추가
+    // ✨ 검색 조건을 위한 JPQL 쿼리 (status, workCenterId 둘 다 필터 가능)
     @Query("SELECT wo FROM WorkOrder wo WHERE " +
             "(:status IS NULL OR wo.currentStatus = :status) AND " +
             "(:workCenterId IS NULL OR wo.workCenter.workCenterId = :workCenterId)")
-    List<WorkOrder> findByFilters(@Param("status") String status, @Param("workCenterId") String workCenterId);
+    List<WorkOrder> findByFilters(@Param("status") String status,
+                                  @Param("workCenterId") String workCenterId);
 }

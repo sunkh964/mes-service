@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import com.example.mes_service.dto.WorkOrderStatusUpdateRequestDto;
 
 @RestController
 @RequestMapping("/api/work-orders")
@@ -30,5 +31,15 @@ public class WorkOrderController {
     public ResponseEntity<WorkOrderResponseDto> createWorkOrder(@RequestBody WorkOrderCreateRequestDto requestDto) {
         WorkOrderResponseDto createdWorkOrder = workOrderService.createWorkOrder(requestDto);
         return new ResponseEntity<>(createdWorkOrder, HttpStatus.CREATED);
+    }
+
+    // ✨ 작업지시 상태 변경 (새로 추가)
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<WorkOrderResponseDto> updateWorkOrderStatus(
+            @PathVariable Integer id,
+            @RequestBody WorkOrderStatusUpdateRequestDto requestDto) {
+
+        WorkOrderResponseDto updatedWorkOrder = workOrderService.updateWorkOrderStatus(id, requestDto.getNewStatus());
+        return ResponseEntity.ok(updatedWorkOrder);
     }
 }
