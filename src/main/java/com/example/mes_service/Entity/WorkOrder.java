@@ -66,6 +66,10 @@ public class WorkOrder {
     @ToString.Exclude
     private WorkCenter workCenter;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "worker_id") // DB에 생성될 외래 키 컬럼
+    private Worker worker;
+
     // --- 기존에 있던 1:N 관계 설정들 ---
     @OneToMany(mappedBy = "workOrder", fetch = FetchType.LAZY)
     private List<WorkResult> workResults;
